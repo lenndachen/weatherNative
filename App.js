@@ -551,8 +551,9 @@ class App extends React.Component {
                 </View>
               )}
               <View style={styles.body}>
+              <Text style={styles.appTitle}>Weather App</Text>
                 <View style={styles.sectionContainer}>
-                  <Text style={styles.sectionTitle}>Weather App</Text>
+                  <Text style={styles.sectionTitle}>Current Forecast</Text>
                   {this.state.current && <Current current={this.state.current} condition={this.state.currentIcon}/>}
                 </View>
                 <View style={styles.sectionContainer}>
@@ -582,10 +583,17 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
+  appTitle: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.black,
+    textAlign: 'center',
+  },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '600',
     color: Colors.black,
+    textAlign: 'center',
   },
   sectionDescription: {
     marginTop: 8,
