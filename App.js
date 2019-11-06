@@ -199,9 +199,7 @@ class App extends React.Component {
         }
         let next4Index = forecastArray.indexOf(next4);
         let next4Array = forecastArray.slice(next4Index);
-        console.warn("whats the end? ", next4Array);
         let temps = this.checkNext4Temps(next4Array);
-        console.warn("next4 temps: ", temps);
         let next4Data = [next4Array[1], temps[1], temps[0], forecastArray[27]];
         return next4Data;
     }
@@ -232,7 +230,6 @@ class App extends React.Component {
             return num >= -100;
         }
         let temps = dayData.filter(checkNums);
-        console.warn("inChkTemps: ", temps);
         switch(true) {
           case (temps.length === 2):
             temps.splice(0,1);
@@ -343,7 +340,6 @@ class App extends React.Component {
                         onChangeText={(text) => this.setState({userEnteredZip: text})}
                         keyboardType='number-pad'
                         value={this.state.userEnteredZip}
-                        clearTextOnFocus='true'
                         >
                     </TextInput>
                     
@@ -354,7 +350,7 @@ class App extends React.Component {
                 </View>
 
                 <View style={{flex:1, alignItems:'center', margin: 20}}>
-                    <Image source={mapUri} style={{width:200, height:200}}/>
+                    {this.state.map === '' ? <Text style={styles.sectionWarn}>PLEASE ENTER A ZIP CODE ABOVE</Text> : <Image source={mapUri} style={{width:200, height:200}}/>}
                 </View>
                 <View style={styles.sectionContainer}>
                   <Text style={styles.sectionTitle}>Current Forecast</Text>
@@ -411,6 +407,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.black,
     textAlign: 'center',
+  },
+  sectionWarn: {
+    fontSize: 24,
+    fontWeight: '600',
+    color: Colors.black,
+    textAlign: 'center',
+    backgroundColor: 'yellow',
   },
   sectionDescription: {
     marginTop: 8,
