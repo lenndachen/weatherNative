@@ -8,6 +8,7 @@
 
 import React from 'react';
 import moment from "moment";
+// require('dotenv').config();
 
 import {
   SafeAreaView,
@@ -44,7 +45,7 @@ class App extends React.Component {
     }
 
     componentDidMount(){
-
+      
     }
 
     submit = (userZip) => {
@@ -55,7 +56,8 @@ class App extends React.Component {
 
     getCurrent = (userInput) => {
          let zipCode = userInput;
-         let apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip="+zipCode+",us&APPID=b2a6c5863316c58e6a97c6a48e78ca12";
+         let apiKey = 'b2a6c5863316c58e6a97c6a48e78ca12';
+         let apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip="+zipCode+",us&APPID="+apiKey;
          fetch(apiUrl)
          .then(response => response.json())
          .then(responseData => {
@@ -78,6 +80,7 @@ class App extends React.Component {
     }
 
     getMap = (userInput) => {
+        let googleKey = 'AIzaSyD2LfBTFUaTpYMG6lG6Zh-Ta-_cMhxjuNU';
         let map = {
           uri: 'https://maps.googleapis.com/maps/api/staticmap?center='+userInput+'&zoom=11&size=350x350&key=AIzaSyD2LfBTFUaTpYMG6lG6Zh-Ta-_cMhxjuNU'
         }
@@ -88,7 +91,8 @@ class App extends React.Component {
 
     getForecast = (userInput) => {
       let zipCode = userInput;
-      let apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip="+zipCode+",us&APPID=b2a6c5863316c58e6a97c6a48e78ca12";
+      let apiKey = 'b2a6c5863316c58e6a97c6a48e78ca12';
+      let apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip="+zipCode+",us&APPID="+apiKey;
       fetch(apiUrl)
       .then(response => response.json())
       .then(responseData => {           
@@ -186,7 +190,7 @@ class App extends React.Component {
 
     next4Array = (forecastArray) => {
         let today = parseInt(forecastArray[0]);
-        let next4Num = today+4;
+        let next4Num = today+5;
         let next4 = next4Num.toString();
         if (next4.length < 2) {
           next4 = "0"+next4Num.toString();
@@ -194,35 +198,128 @@ class App extends React.Component {
           next4 = next4Num.toString();
         }
         let next4Index = forecastArray.indexOf(next4);
-        let next4Array = forecastArray.slice(next4Index, next4Index+48);
-        let temps = this.checkTemps(next4Array);
+        let next4Array = forecastArray.slice(next4Index);
+        console.warn("whats the end? ", next4Array);
+        let temps = this.checkNext4Temps(next4Array);
+        console.warn("next4 temps: ", temps);
         let next4Data = [next4Array[1], temps[1], temps[0], forecastArray[27]];
         return next4Data;
     }
 
     checkTemps = (dayArray) => {
+      let dayData = dayArray;
+      function checkNums(num) {
+          return num >= -100;
+      }
+      let temps = dayData.filter(checkNums);
+      temps.splice(0,1);
+      temps.splice(1,1);
+      temps.splice(2,1);
+      temps.splice(3,1);
+      temps.splice(4,1);
+      temps.splice(5,1);
+      temps.splice(6,1);
+      temps.splice(7,1);
+      let low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
+      let high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
+      let lowHigh = [low, high];
+      return lowHigh;
+    }
+
+    checkNext4Temps = (dayArray) => {
         let dayData = dayArray;
         function checkNums(num) {
             return num >= -100;
         }
         let temps = dayData.filter(checkNums);
-        temps.splice(0,1);
-        temps.splice(1,1);
-        temps.splice(2,1);
-        temps.splice(3,1);
-        temps.splice(4,1);
-        temps.splice(5,1);
-        temps.splice(6,1);
-        temps.splice(7,1);
-        let low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
-        let high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
-        let lowHigh = [low, high];
-        return lowHigh;
+        console.warn("inChkTemps: ", temps);
+        switch(true) {
+          case (temps.length === 2):
+            temps.splice(0,1);
+            let low = temps[0];
+            let high = temps[0];
+            let lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 4):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            low = Math.min(temps[0], temps[1]);
+            high = Math.max(temps[0], temps[1]);
+            lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 6):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            temps.splice(2,1);
+            low = Math.min(temps[0], temps[1], temps[2]);
+            high = Math.max(temps[0], temps[1], temps[2]);
+            lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 8):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            temps.splice(2,1);
+            temps.splice(3,1);
+            low = Math.min(temps[0], temps[1], temps[2], temps[3]);
+            high = Math.max(temps[0], temps[1], temps[2], temps[3]);
+            lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 10):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            temps.splice(2,1);
+            temps.splice(3,1);
+            temps.splice(4,1);
+            low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4]);
+            high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4]);
+            lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 12):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            temps.splice(2,1);
+            temps.splice(3,1);
+            temps.splice(4,1);
+            temps.splice(5,1);
+            low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5]);
+            high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5]);
+            lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 14):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            temps.splice(2,1);
+            temps.splice(3,1);
+            temps.splice(4,1);
+            temps.splice(5,1);
+            temps.splice(6,1);
+            low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6]);
+            high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6]);
+            lowHigh = [low, high];
+            return lowHigh;
+          case (temps.length === 16):
+            temps.splice(0,1);
+            temps.splice(1,1);
+            temps.splice(2,1);
+            temps.splice(3,1);
+            temps.splice(4,1);
+            temps.splice(5,1);
+            temps.splice(6,1);
+            temps.splice(7,1);
+            low = Math.min(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
+            high = Math.max(temps[0], temps[1], temps[2], temps[3], temps[4], temps[5], temps[6], temps[7]);
+            lowHigh = [low, high];
+            return lowHigh;
+          default:
+            lowHigh = ['TBD', 'TBD'];
+            return lowHigh;
+        }
     }
 
     render() {
         let mapUri = this.state.map;
         console.log("forecast data: ", this.state.forecast);
+        
 
       return (
         <>
