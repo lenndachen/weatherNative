@@ -273,11 +273,11 @@ class App extends React.Component {
                   <Text style={styles.sectionTitle}>5 Day Forecast</Text>
                     {this.state.forecast !== [] && <Forecast 
                     forecast={this.state.forecast}
-                    tomorrow={this.tomorrowArray(Object.assign(this.state.forecast))}
-                    next1={this.next1Array(Object.assign(this.state.forecast))}
-                    next2={this.next2Array(Object.assign(this.state.forecast))}
-                    next3={this.next3Array(Object.assign(this.state.forecast))}
-                    next4={this.next4Array(Object.assign(this.state.forecast))}
+                    tomorrow={this.tomorrowArray(this.state.forecast)}
+                    next1={this.next1Array(this.state.forecast)}
+                    next2={this.next2Array(this.state.forecast)}
+                    next3={this.next3Array(this.state.forecast)}
+                    next4={this.next4Array(this.state.forecast)}
                     />}
                 </View>            
               </View>
