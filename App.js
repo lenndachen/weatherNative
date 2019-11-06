@@ -29,6 +29,8 @@ import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Current from "react-native/Libraries/Components/CurrentWeather/index.js";
 import Forecast from "react-native/Libraries/Components/Forecast/index.js";
 
+import { API_WEATHER_KEY, API_GOOGLE_MAP_KEY } from 'react-native-dotenv';
+
 class App extends React.Component {
     constructor(props){
         super(props);
@@ -56,8 +58,9 @@ class App extends React.Component {
 
     getCurrent = (userInput) => {
          let zipCode = userInput;
-         let apiKey = 'b2a6c5863316c58e6a97c6a48e78ca12';
-         let apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip="+zipCode+",us&APPID="+apiKey;
+         let test = API_WEATHER_KEY;
+         console.log("test", test);
+         let apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip="+zipCode+",us&APPID="+API_WEATHER_KEY;
          fetch(apiUrl)
          .then(response => response.json())
          .then(responseData => {
@@ -80,9 +83,9 @@ class App extends React.Component {
     }
 
     getMap = (userInput) => {
-        let googleKey = 'AIzaSyD2LfBTFUaTpYMG6lG6Zh-Ta-_cMhxjuNU';
-        let map = {
-          uri: 'https://maps.googleapis.com/maps/api/staticmap?center='+userInput+'&zoom=11&size=350x350&key=AIzaSyD2LfBTFUaTpYMG6lG6Zh-Ta-_cMhxjuNU'
+      let uri = 'https://maps.googleapis.com/maps/api/staticmap?center='+userInput+'&zoom=11&size=350x350&key='+API_GOOGLE_MAP_KEY;  
+      let map = {
+          uri: uri,
         }
         this.setState({
           map: map,
@@ -91,8 +94,7 @@ class App extends React.Component {
 
     getForecast = (userInput) => {
       let zipCode = userInput;
-      let apiKey = 'b2a6c5863316c58e6a97c6a48e78ca12';
-      let apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip="+zipCode+",us&APPID="+apiKey;
+      let apiUrl = "http://api.openweathermap.org/data/2.5/forecast?zip="+zipCode+",us&APPID="+API_WEATHER_KEY;
       fetch(apiUrl)
       .then(response => response.json())
       .then(responseData => {           
