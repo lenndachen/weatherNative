@@ -8,7 +8,7 @@
 
 import React from 'react';
 import moment from "moment";
-// require('dotenv').config();
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   SafeAreaView,
@@ -58,9 +58,8 @@ class App extends React.Component {
 
     getCurrent = (userInput) => {
          let zipCode = userInput;
-         let test = API_WEATHER_KEY;
-         console.log("test", test);
-         let apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip="+zipCode+",us&APPID="+API_WEATHER_KEY;
+         let apiKey = API_WEATHER_KEY;
+         let apiUrl = "http://api.openweathermap.org/data/2.5/weather?zip="+zipCode+",us&APPID="+apiKey;
          fetch(apiUrl)
          .then(response => response.json())
          .then(responseData => {
@@ -315,10 +314,30 @@ class App extends React.Component {
         }
     }
 
+    saveZip = () => {
+      let zip = this.state.userEnteredZip;
+
+      let zipArray = {
+        zip: zip,
+      }
+
+      let test = AsyncStorage.setItem('myZip', JSON.stringify(zipArray))
+      console.log("Zip Code saved?", test);
+    }
+
+    showZip = async() => {
+      let myZip = await AsyncStorage.getItem('myZip');
+      let d = JSON.parse(myZip);
+      console.log(d.zip + "had been saved");
+    }
+
     render() {
         let mapUri = this.state.map;
         console.log("forecast data: ", this.state.forecast);
-        
+        AsyncStorage.getItem('test', (err, result) => {
+          console.log("stored: ", result);
+          console.log("zip: ", result.savedZip);
+        })
 
       return (
         <>
@@ -349,6 +368,18 @@ class App extends React.Component {
                         onPress={() => this.submit(this.state.userEnteredZip)}
                         title="submit"
                     > Submit </Button>
+
+                    <Button
+                        onPress={() => this.saveZip}
+                        title="Save Zip Code"
+                        color="orange" />
+
+                    <Button 
+                        onPress={() => this.showZip} 
+                        title="Show Zip"
+                        color="magenta"
+                    />
+
                 </View>
 
                 <View style={{flex:1, alignItems:'center', margin: 20}}>
