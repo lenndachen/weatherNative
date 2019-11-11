@@ -369,7 +369,7 @@ class App extends React.Component {
                         title="submit"
                     > Submit </Button>
 
-                    <Button
+                    {/* <Button
                         onPress={() => this.saveZip}
                         title="Save Zip Code"
                         color="orange" />
@@ -378,7 +378,7 @@ class App extends React.Component {
                         onPress={() => this.showZip} 
                         title="Show Zip"
                         color="magenta"
-                    />
+                    /> */}
 
                 </View>
 
